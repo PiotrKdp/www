@@ -231,7 +231,6 @@
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
@@ -240,24 +239,33 @@
   <script src="assets/js/main.js"></script>
   <script>
     const form = document.getElementById('contactform');
-    const komunikat = document.getElementById('smessage');
+    const przycisk = form.querySelector('button[type="submit"]');
 
     const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyr3owfaRFImjZ6pBnK11fg-4F3oEMaKFr5rGOY-CJ1fgxrZoX3N-lkZTU5EOcOhKHr/exec';
 
     form.addEventListener('submit', e => {
       e.preventDefault();
 
+      if (przycisk) {
+        przycisk.disabled = true;
+        przycisk.innerText = 'Sending...';
+      }
+
       fetch(googleScriptUrl, {
         method: 'POST',
         body: new FormData(form)
       })
         .then(response => {
-          form.style.display = 'none';
-          komunikat.style.display = 'block';
+          window.location.href = 'success.html';
         })
         .catch(error => {
-          console.error('Error', error.message);
+          console.error('Error:', error.message);
           alert('Message could not be sent. Please try again.');
+
+          if (przycisk) {
+            przycisk.disabled = false;
+            przycisk.innerText = 'Send Message';
+          }
         });
     });
   </script>
