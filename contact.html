@@ -161,7 +161,7 @@
           </div>
         </div>
 
-        <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="300">
+        <form id="contactform" data-aos="fade-up" data-aos-delay="300">
           <div class="row gy-4">
 
             <div class="col-md-6">
@@ -181,9 +181,7 @@
             </div>
 
             <div class="col-md-12 text-center">
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your message has been sent. Thank you!</div>
+              <div id="smessage" style="display:none;">Your message has been sent. Thank you!</div>
 
               <button type="submit">Send Message</button>
             </div>
@@ -240,6 +238,29 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    const form = document.getElementById('contactform');
+    const komunikat = document.getElementById('smessage');
+
+    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyr3owfaRFImjZ6pBnK11fg-4F3oEMaKFr5rGOY-CJ1fgxrZoX3N-lkZTU5EOcOhKHr/exec';
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      fetch(googleScriptUrl, {
+        method: 'POST',
+        body: new FormData(form)
+      })
+        .then(response => {
+          form.style.display = 'none';
+          komunikat.style.display = 'block';
+        })
+        .catch(error => {
+          console.error('Error', error.message);
+          alert('Message could not be sent. Please try again.');
+        });
+    });
+  </script>
 
 </body>
 
